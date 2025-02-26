@@ -1,9 +1,9 @@
 #include <SDL.h>
 #include <iostream>
 
-const int SCREEN_WIDTH = 400;
+const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
-const int TILE_SIZE = 40;  // Each tile is 40x40 pixels
+const int TILE_SIZE = 60;
 const int MAP_ROWS = 10;
 const int MAP_COLS = 10;
 const char* TITLE="Maze Escape";
@@ -14,7 +14,7 @@ void initSDL(SDL_Window* &window, SDL_Renderer* &renderer){
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
     SDL_RenderSetLogicalSize(renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
 }
-// Maze representation: 1 = Wall, 0 = Path
+
 int maze[MAP_ROWS][MAP_COLS] = {
     {1,1,1,1,1,1,1,1,1,1},
     {1,0,0,0,0,1,0,0,0,1},
@@ -27,7 +27,6 @@ int maze[MAP_ROWS][MAP_COLS] = {
     {1,1,1,1,1,1,1,1,1,1}
 };
 
-// Function to draw the maze
 void drawMaze(SDL_Renderer* renderer) {
     SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);  // Blue color for walls
 
@@ -63,17 +62,12 @@ int main(int argc, char* argv[]) {
         SDL_Window* window;
         SDL_Renderer* renderer;
         initSDL(window, renderer);
-
-            // Clear the screen
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);  // Black background
         SDL_RenderClear(renderer);
-
-        // Draw the maze
         drawMaze(renderer);
-
         SDL_RenderPresent(renderer);
-    waitUntilKeyPressed();
-    quitSDL(window, renderer);
+        waitUntilKeyPressed();
+        quitSDL(window, renderer);
 
 
     return 0;
