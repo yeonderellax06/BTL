@@ -1,0 +1,16 @@
+# depslib dependency file v1.0
+1744304738 source:d:\c++\btl\main.cpp
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	<vector>
+	<ctime>
+	"Player.h"
+
+1744304519 d:\c++\btl\player.h
+	<SDL.h>
+	<SDL_image.h>
+
+1744305423 source:d:\c++\btl\player.cpp
+	"Player.h"
+

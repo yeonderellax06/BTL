@@ -1,8 +1,11 @@
 #include<iostream>
+#define SDL_MAIN_HANDLED
 #include<SDL.h>
 #include<SDL_image.h>
 #include<vector>
 #include<ctime>
+
+#include "Player.h"
 
 using namespace std;
 
@@ -77,6 +80,9 @@ if (!platformTex) std::cout << "Failed to load platform: " << IMG_GetError() << 
 
 if (!bg) std::cout << "Failed to load background: " << IMG_GetError() << std::endl;
 
+
+    Player player(renderer);
+
     float x = 200, y = 300, dy = 0;
     const float gravity = 0.3f, jumpForce = -10;
 
@@ -92,35 +98,36 @@ if (!bg) std::cout << "Failed to load background: " << IMG_GetError() << std::en
             if (e.type == SDL_QUIT) running = false;
         }
     const Uint8* keys = SDL_GetKeyboardState(NULL);
-    if (keys[SDL_SCANCODE_LEFT]) x -=5;
-    if (keys[SDL_SCANCODE_RIGHT]) x+=5;
+    player.handleInput(keys);
+    player.update(gravity, jumpForce);
 
-    dy += gravity;
-    y += dy;
-
-    for (auto&p : platforms){
-        if ((x + PLAYER_WIDTH > p.x && x < p.x + PLATFORM_WIDTH) && (y + PLAYER_HEIGHT > p.y && y + PLAYER_HEIGHT < p.y + PLATFORM_HEIGHT) && dy>0){
-            dy = jumpForce;
-
-        }
-    }
-    if (y < 200) {
-        y = 200;
-        for (auto&p : platforms){
-            p.y -=dy;
-            if (p.y > SCREEN_HEIGHT){
-                p.y = 0;
-                p.x = rand() % (SCREEN_WIDTH - PLATFORM_WIDTH);
+    SDL_Rect playerRect = player.getRect();
+        for (auto& p : platforms) {
+            if (playerRect.x + playerRect.w > p.x &&
+                playerRect.x < p.x + PLATFORM_WIDTH &&
+                playerRect.y + playerRect.h > p.y &&
+                playerRect.y + playerRect.h < p.y + PLATFORM_HEIGHT &&
+                player.getY() + playerRect.h < SCREEN_HEIGHT)
+            {
+                player.jump();
             }
         }
-    }
+    if (player.getY() < 200) {
+            player.setY(200);
+            for (auto& p : platforms) {
+                p.y -= playerRect.y - 200;
+                if (p.y > SCREEN_HEIGHT) {
+                    p.y = 0;
+                    p.x = rand() % (SCREEN_WIDTH - PLATFORM_WIDTH);
+                }
+            }
+        }
     SDL_RenderCopy(renderer, bg, nullptr, nullptr);
     for (auto&p : platforms){
         SDL_Rect platRect = {p.x, p.y, PLATFORM_WIDTH, PLATFORM_HEIGHT};
         SDL_RenderCopy(renderer, platformTex, nullptr, &platRect);
         }
-    SDL_Rect playerRect = { (int) x, (int) y, PLAYER_WIDTH, PLAYER_HEIGHT};
-    SDL_RenderCopy(renderer, doodler, nullptr, &playerRect);
+    player.render(renderer);
 
     SDL_RenderPresent(renderer);
     SDL_Delay(16);
