@@ -91,3 +91,4 @@ void Player::setX(float newX) {
 SDL_Rect Player::getRect() const {
     return rect;
 }
+
