@@ -1,0 +1,9 @@
+#ifndef CONSTANTS_H
+#define CONSTANTS_H
+
+const int SCREEN_WIDTH = 400;
+const int SCREEN_HEIGHT = 600;
+const int PLAYER_WIDTH = 50, PLAYER_HEIGHT = 50;
+const int PLATFORM_WIDTH = 68, PLATFORM_HEIGHT = 14;
+
+#endif // CONSTANTS_H

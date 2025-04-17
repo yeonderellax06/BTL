@@ -1,35 +1,25 @@
 #include "GameOver.h"
+#include<SDL_image.h>
+#include<iostream>
 
-GameOverScreen::GameOverScreen(SDL_Renderer *renderer): gameOver(false), font(nullptr), messageTexture(nullptr){
-    font = TTF_OpenFont("fonts/arial.ttf",48);
-    if (!font){
-        SDL_Log("failed to load font: %s", TTF_GetError());
-        return;
-    }
-    SDL_Color color = {255, 0 , 0};
-    SDL_Surface* surface = TTF_RenderText_Solid(font,"Game Over",color);
+GameOverScreen::GameOverScreen(SDL_Renderer *renderer): gameOver(false), gameOverTexture(nullptr){
+
+    SDL_Surface* surface = IMG_Load("images/gameover-cover.png");
     if (!surface){
-        SDL_Log("failed to render text surface %s", TTF_GetError());
+        SDL_Log("failed to render text surface %s", IMG_GetError());
         return;
     }
-    messageTexture = SDL_CreateTextureFromSurface(renderer, surface);
-    if (!messageTexture) SDL_Log("failed to create text texture: %s",SDL_GetError());
-
-    messageRect.x = (400 - surface->w)/2;
-    messageRect.y = (600 - surface->h)/2;
-    messageRect.w = surface->w;
-    messageRect.h = surface->h;
-
+    gameOverTexture = SDL_CreateTextureFromSurface(renderer, surface);
     SDL_FreeSurface(surface);
+
 }
 
 GameOverScreen::~GameOverScreen(){
-    if (messageTexture) SDL_DestroyTexture(messageTexture);
-    if (font) TTF_CloseFont(font);
+    if (gameOverTexture) SDL_DestroyTexture(gameOverTexture);
 }
 void GameOverScreen::render(SDL_Renderer* renderer){
-    if (gameOver && messageTexture) {
-        SDL_RenderCopy(renderer, messageTexture, nullptr, &messageRect);
+    if (gameOver && gameOverTexture) {
+        SDL_RenderCopy(renderer, gameOverTexture, nullptr, nullptr);
 
     }
 }

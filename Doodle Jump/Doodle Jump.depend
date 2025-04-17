@@ -14,17 +14,21 @@
 1744610596 source:d:\c++\btl\player.cpp
 	"Player.h"
 
-1744766847 source:d:\c++\btl\doodle jump\platform.cpp
+1744908661 source:d:\c++\btl\doodle jump\platform.cpp
+	"Platform.h"
+	<cstdlib>
+	<ctime>
 
-1744885301 source:d:\c++\btl\doodle jump\gameover.cpp
+1744886529 source:d:\c++\btl\doodle jump\gameover.cpp
 	"GameOver.h"
+	<SDL_image.h>
+	<iostream>
 
-1744885326 d:\c++\btl\doodle jump\gameover.h
+1744886306 d:\c++\btl\doodle jump\gameover.h
 	<SDL.h>
-	<SDL_ttf.h>
 	<string>
 
-1744885590 source:d:\c++\btl\doodle jump\main.cpp
+1744909168 source:d:\c++\btl\doodle jump\main.cpp
 	<iostream>
 	<SDL.h>
 	<SDL_image.h>
@@ -33,12 +37,24 @@
 	<vector>
 	<ctime>
 	"Player.h"
+	"Platform.h"
 	"GameOver.h"
+	"constants.h"
 
-1744885441 d:\c++\btl\doodle jump\player.h
+1744908967 d:\c++\btl\doodle jump\player.h
 	<SDL.h>
 	<SDL_image.h>
+	"constants.h"
 
-1744885611 source:d:\c++\btl\doodle jump\player.cpp
+1744901693 source:d:\c++\btl\doodle jump\player.cpp
 	"Player.h"
+
+1744908974 d:\c++\btl\doodle jump\platform.h
+	<SDL.h>
+	<vector>
+	<cstdlib>
+	<ctime>
+	"constants.h"
+
+1744909168 d:\c++\btl\doodle jump\constants.h
 

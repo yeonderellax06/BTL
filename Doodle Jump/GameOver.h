@@ -2,7 +2,6 @@
 #define GAMEOVER_H
 
 #include <SDL.h>
-#include <SDL_ttf.h>
 #include <string>
 
 class GameOverScreen {
@@ -15,9 +14,8 @@ public:
     void setGameOver(bool over);
 private:
     bool gameOver;
-    TTF_Font* font;
-    SDL_Texture* messageTexture;
-    SDL_Rect messageRect;
+    SDL_Texture* gameOverTexture;
+    SDL_Rect destRect;
 };
 
 #endif // GAMEOVER_H

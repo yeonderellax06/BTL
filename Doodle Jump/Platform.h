@@ -1,22 +1,36 @@
-#ifndef PLATFORM
-#define FLATFORM
-#include <SDL.h>
+#ifndef PLATFORM_H
+#define PLATFORM_H
+
+#include<SDL.h>
 #include <vector>
 #include <cstdlib>
 #include <ctime>
+#include "constants.h"
 
-const int SCREEN_HEIGHT = 600;
-const int SCREEN_WIDTH = 400;
-const int PLATFORM_HEIGHT = 14;
-const int PLATFORM_WIDTH = 68;
+using namespace std;
+
+
 
 struct Platform {
-    int x;
-    int y;
-    PLatform (int _x, int _y){
-        x = _x;
-        y = _y;
-    }
-int };
+    int x,y;
 
-#endif // PLATFORM
+    Platform (int _x, int _y);
+    SDL_Rect getRect() const;
+};
+class PlatformManager {
+private:
+    vector <Platform> platforms;
+    int platformCount;
+    int verticalSpacingMin;
+    int verticalSpacingMax;
+public:
+    PlatformManager(int count = 10, int spacingMin = 40, int spacingMax = 80);
+
+    void generatePlatforms();
+    vector <Platform> &getPlatforms();
+    void update (float dy);
+    void render (SDL_Renderer *renderer, SDL_Texture *platformTex);
+
+};
+
+#endif // PLATFORM_H

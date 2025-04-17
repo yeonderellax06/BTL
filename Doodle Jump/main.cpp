@@ -8,18 +8,14 @@
 #include<ctime>
 
 #include "Player.h"
+#include "Platform.h"
 #include "GameOver.h"
+#include "constants.h"
 
 using namespace std;
 
-const int SCREEN_WIDTH = 400;
 const char* TITLE = "Doodle Jump";
-const int PLAYER_WIDTH = 50, PLAYER_HEIGHT = 50;
-const int PLATFORM_WIDTH = 68, PLATFORM_HEIGHT = 14;
 
-struct Platform {
-    int x, y;
-};
 
 void logErrorAndExit(const char* msg, const char* error)
 {
@@ -62,27 +58,20 @@ int main(int argc, char* argv[])
     SDL_Window* window = initSDL(SCREEN_WIDTH, SCREEN_HEIGHT, TITLE);
     SDL_Renderer* renderer = createRenderer(window);
 
-    SDL_Texture* doodler = IMG_LoadTexture(renderer, "images/doodle.png");
     SDL_Texture* platformTex = IMG_LoadTexture(renderer, "images/platform.png");
     SDL_Texture* bg = IMG_LoadTexture(renderer, "images/background.png");
 
-if (!doodler) std::cout << "Failed to load doodler: " << IMG_GetError() << std::endl;
+/*if (!doodler) std::cout << "Failed to load doodler: " << IMG_GetError() << std::endl;
 if (!platformTex) std::cout << "Failed to load platform: " << IMG_GetError() << std::endl;
 if (!bg) std::cout << "Failed to load background: " << IMG_GetError() << std::endl;
-
+*/
 
     Player player(renderer);
+    PlatformManager platformManager;
     GameOverScreen gameOverScreen(renderer);
 
     float x = 200, y = 300, dy = 0;
-    const float gravity = 0.3f, jumpForce = -10;
-
-    vector<Platform> platforms(10);
-    srand(time(0));
-    for (int i = 0; i < platforms.size(); ++i) {
-        platforms[i].x = rand() % (SCREEN_WIDTH - PLATFORM_WIDTH);
-        platforms[i].y = i * (SCREEN_HEIGHT / platforms.size());
-    }
+    const float gravity = 0.3f, jumpForce = -10.0f;
 
     bool running = true;
     SDL_Event e;
@@ -98,43 +87,25 @@ if (!bg) std::cout << "Failed to load background: " << IMG_GetError() << std::en
     player.handleInput(keys);
     player.update(gravity, jumpForce);
 
-    SDL_Rect playerRect = player.getRect();
-
-    bool onPlatform = false;
-        for (auto& p : platforms) {
-            if (playerRect.x + playerRect.w > p.x &&
-                playerRect.x < p.x + PLATFORM_WIDTH &&
-                playerRect.y + playerRect.h > p.y &&
-                playerRect.y + playerRect.h < p.y + PLATFORM_HEIGHT &&
-                player.getY() + playerRect.h < SCREEN_HEIGHT)
-            {
-                onPlatform = true;
+    for (auto& platform : platformManager.getPlatforms()) {
+            if (player.checkCollision(platform.getRect())){
+                player.landOnPlatform();
+                player.setY(platform.y - player.getRect().h);
+                player.jump(jumpForce);
                 break;
             }
-        }
-    if (onPlatform && !player.isOnGround()) {
-            player.landOnPlatform();
-            player.jump(jumpForce); // chỉ nhảy khi tiếp đất
 
         }
 
     if (player.getY() < 200) {
+            float dy = 200 - player.getY();
             player.setY(200);
-            for (auto& p : platforms) {
-                p.y -= playerRect.y - 200;
-                if (p.y > SCREEN_HEIGHT) {
-                    p.y = 0;
-                    p.x = rand() % (SCREEN_WIDTH - PLATFORM_WIDTH);
-                }
+            platformManager.update(dy);
             }
-        }
     SDL_RenderClear(renderer);
     SDL_RenderCopy(renderer, bg, nullptr, nullptr);
 
-    for (auto&p : platforms){
-        SDL_Rect platRect = {p.x, p.y, PLATFORM_WIDTH, PLATFORM_HEIGHT};
-        SDL_RenderCopy(renderer, platformTex, nullptr, &platRect);
-        }
+    platformManager.render(renderer, platformTex);
     player.render(renderer);
 
     if (gameOverScreen.isGameOver()){
@@ -148,7 +119,6 @@ if (!bg) std::cout << "Failed to load background: " << IMG_GetError() << std::en
     SDL_Delay(16);
     }
 
-    SDL_DestroyTexture(doodler);
     SDL_DestroyTexture(platformTex);
     SDL_DestroyTexture(bg);
     SDL_DestroyRenderer(renderer);

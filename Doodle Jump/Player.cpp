@@ -45,7 +45,7 @@ void Player::update(float gravity, float jumpForce){
 void Player::jump(float jumpForce) {
     if (onGround) {
         dy = jumpForce;
-        onGround = false; // Đang trong trạng thái nhảy
+        onGround = false;
     }
 }
 
@@ -54,9 +54,6 @@ void Player::landOnPlatform() {
     onGround = true;
 }
 
-void Player::resetJump() {
-    onGround = false;
-}
 
 bool Player::isOnGround() const {
     return onGround;
@@ -90,5 +87,18 @@ void Player::setX(float newX) {
 
 SDL_Rect Player::getRect() const {
     return rect;
+}
+
+bool Player::checkCollision(const SDL_Rect &platformRect){
+    SDL_Rect playerRect = getRect();
+
+    bool isFalling = dy >0;
+    bool horizontalOverlap = playerRect.x + playerRect.w > platformRect.x &&
+                             playerRect.x < platformRect.x + platformRect.w;
+
+    bool verticalCollision = playerRect.y + playerRect.h <= platformRect.y + 10 &&
+                             playerRect.y + playerRect.h >= platformRect.y - 10;
+
+    return isFalling && horizontalOverlap && verticalCollision;
 }
 

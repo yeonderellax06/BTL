@@ -3,8 +3,9 @@
 
 #include <SDL.h>
 #include <SDL_image.h>
+#include "constants.h"
 
-const int SCREEN_HEIGHT = 600;
+
 
 class Player {
 public:
@@ -23,9 +24,9 @@ public:
 
     void jump(float jumpForce);
     void landOnPlatform();
-    void resetJump();
     bool isOnGround() const;
     bool isGameOver() const;
+    bool checkCollision(const SDL_Rect& platformRect);
 private:
     float x, y, dy;
     SDL_Texture* texLeft;

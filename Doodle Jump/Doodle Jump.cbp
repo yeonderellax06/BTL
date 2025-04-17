@@ -32,12 +32,11 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
-		<Unit filename="../Player.cpp" />
-		<Unit filename="../Player.h" />
-		<Unit filename="../main.cpp" />
 		<Unit filename="GameOver.cpp" />
 		<Unit filename="GameOver.h" />
+		<Unit filename="Player.cpp" />
 		<Unit filename="Player.h" />
+		<Unit filename="main.cpp" />
 		<Extensions />
 	</Project>
 </CodeBlocks_project_file>
