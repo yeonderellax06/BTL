@@ -30,7 +30,7 @@ public:
     vector <Platform> &getPlatforms();
     void update (float dy);
     void render (SDL_Renderer *renderer, SDL_Texture *platformTex);
-
+    void reset();
 };
 
 #endif // PLATFORM_H

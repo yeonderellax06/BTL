@@ -102,3 +102,9 @@ bool Player::checkCollision(const SDL_Rect &platformRect){
     return isFalling && horizontalOverlap && verticalCollision;
 }
 
+void Player::reset(){
+    rect.x = 200;
+    rect.y = 300;
+    dy = 0;
+}
+

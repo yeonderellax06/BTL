@@ -49,3 +49,8 @@ void PlatformManager::render(SDL_Renderer *renderer, SDL_Texture *platformTex){
         SDL_RenderCopy(renderer, platformTex, nullptr, &rect);
     }
 }
+
+void PlatformManager::reset(){
+    platforms.clear();
+    generatePlatforms();
+}

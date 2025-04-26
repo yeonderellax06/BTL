@@ -11,10 +11,13 @@
 #include "Platform.h"
 #include "GameOver.h"
 #include "constants.h"
+#include "Menu.h"
 
 using namespace std;
 
 const char* TITLE = "Doodle Jump";
+
+enum class GameState { Menu, Playing, GameOver};
 
 
 void logErrorAndExit(const char* msg, const char* error)
@@ -60,28 +63,90 @@ int main(int argc, char* argv[])
 
     SDL_Texture* platformTex = IMG_LoadTexture(renderer, "images/platform.png");
     SDL_Texture* bg = IMG_LoadTexture(renderer, "images/background.png");
-
+    SDL_Texture* menuCover = IMG_LoadTexture(renderer, "images/menu-cover.png");
 /*if (!doodler) std::cout << "Failed to load doodler: " << IMG_GetError() << std::endl;
 if (!platformTex) std::cout << "Failed to load platform: " << IMG_GetError() << std::endl;
 if (!bg) std::cout << "Failed to load background: " << IMG_GetError() << std::endl;
 */
 
+    Menu menu(renderer);
     Player player(renderer);
     PlatformManager platformManager;
     GameOverScreen gameOverScreen(renderer);
+
+    GameState currentState = GameState::Menu;
 
     float x = 200, y = 300, dy = 0;
     const float gravity = 0.3f, jumpForce = -10.0f;
 
     bool running = true;
     SDL_Event e;
+
     while (running){
         while (SDL_PollEvent(&e)){
             if (e.type == SDL_QUIT) running = false;
+            else if (e.type == SDL_MOUSEBUTTONDOWN){
+                int x,y;
+                SDL_GetMouseState(&x, &y);
+                if (currentState == GameState::Menu){
+                    Button* clicked = menu.checkClick(x,y);
+                    if (clicked){
+                        switch (clicked->getType()){
+                            case ButtonType::Play:
+                                running = true;
+                                currentState = GameState::Playing;
+                                player.reset();
+                                platformManager.reset();
+                                break;
+                            case ButtonType::Quit:
+                                running = false;
+                                break;
+                            case ButtonType::Resume:
+                                // tiep tuc choi
+                                break;
+                            case ButtonType::Menu:
+                                currentState = GameState::Menu;
+                                break;
+                            case ButtonType::PlayAgain:
+                                //choi lai tu dau
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+                else if (currentState == GameState::GameOver){
+                    Button* clicked = gameOverScreen.checkClick(x,y);
+                    if (clicked){
+                        switch (clicked->getType()){
+                        case ButtonType::PlayAgain:
+                            currentState = GameState::Playing;
+                            player.reset();
+                            platformManager.reset();
+                            gameOverScreen.setGameOver(false);
+                            break;
+                        case ButtonType::Menu:
+                            currentState = GameState::Menu;
+                            gameOverScreen.setGameOver(false);
+                            break;
+                        default:
+                            break;
+                        }
+                    }
+                }
+            }
         }
-        if (player.isGameOver()) {
-            gameOverScreen.setGameOver(true);
-        }
+
+    SDL_RenderClear(renderer);
+    //SDL_RenderCopy(renderer, bg, nullptr, nullptr);
+
+    if (currentState == GameState::Menu){
+        SDL_RenderCopy(renderer, menuCover, nullptr, nullptr);
+        menu.draw(renderer);
+    }
+    else if (currentState == GameState::Playing){
+        SDL_RenderCopy(renderer, bg, nullptr, nullptr);
+
 
     const Uint8* keys = SDL_GetKeyboardState(NULL);
     player.handleInput(keys);
@@ -94,7 +159,6 @@ if (!bg) std::cout << "Failed to load background: " << IMG_GetError() << std::en
                 player.jump(jumpForce);
                 break;
             }
-
         }
 
     if (player.getY() < 200) {
@@ -102,17 +166,21 @@ if (!bg) std::cout << "Failed to load background: " << IMG_GetError() << std::en
             player.setY(200);
             platformManager.update(dy);
             }
-    SDL_RenderClear(renderer);
-    SDL_RenderCopy(renderer, bg, nullptr, nullptr);
+
 
     platformManager.render(renderer, platformTex);
     player.render(renderer);
 
-    if (gameOverScreen.isGameOver()){
+     if (player.isGameOver()) {
+            gameOverScreen.setGameOver(true);
+            currentState = GameState::GameOver;
+        }
+    }
+
+    else if (currentState == GameState::GameOver){
+        SDL_RenderCopy(renderer, bg, nullptr, nullptr);
         gameOverScreen.render(renderer);
         SDL_RenderPresent(renderer);
-        SDL_Delay(3000);
-        break;
     }
 
     SDL_RenderPresent(renderer);
@@ -121,6 +189,8 @@ if (!bg) std::cout << "Failed to load background: " << IMG_GetError() << std::en
 
     SDL_DestroyTexture(platformTex);
     SDL_DestroyTexture(bg);
+    SDL_DestroyTexture(menuCover);
+
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
 

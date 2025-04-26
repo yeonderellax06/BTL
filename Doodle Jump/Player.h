@@ -27,6 +27,8 @@ public:
     bool isOnGround() const;
     bool isGameOver() const;
     bool checkCollision(const SDL_Rect& platformRect);
+
+    void reset();
 private:
     float x, y, dy;
     SDL_Texture* texLeft;

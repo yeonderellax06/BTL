@@ -34,8 +34,12 @@
 		</Compiler>
 		<Unit filename="GameOver.cpp" />
 		<Unit filename="GameOver.h" />
+		<Unit filename="Menu.h" />
+		<Unit filename="Platform.cpp" />
+		<Unit filename="Platform.h" />
 		<Unit filename="Player.cpp" />
 		<Unit filename="Player.h" />
+		<Unit filename="constants.h" />
 		<Unit filename="main.cpp" />
 		<Extensions />
 	</Project>
