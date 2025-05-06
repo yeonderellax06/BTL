@@ -17,13 +17,13 @@
 1746514644 source:d:\c++\btl\doodle jump\platform.cpp
 	"Platform.h"
 
-1746517398 source:d:\c++\btl\doodle jump\gameover.cpp
+1746518683 source:d:\c++\btl\doodle jump\gameover.cpp
 	"GameOver.h"
 	"constants.h"
 	<SDL_image.h>
 	<iostream>
 
-1746517398 d:\c++\btl\doodle jump\gameover.h
+1746518683 d:\c++\btl\doodle jump\gameover.h
 	<SDL.h>
 	<SDL_mixer.h>
 	<string>
