@@ -1,9 +1,10 @@
 #include "Button.h"
+#include "constants.h"
 
 Button :: Button(const SDL_FRect&box, SDL_Texture* texture, const SDL_Rect&spriteCut, ButtonType type)
 : box_(box), texture_(texture), spriteCut_(spriteCut), type_(type){}
 
-void Button::draw(SDL_Renderer* renderer){
+void Button::draw(SDL_Renderer* renderer) const{
     SDL_Rect dest = {
         static_cast<int>(box_.x),
         static_cast<int>(box_.y),
@@ -19,4 +20,8 @@ bool Button::contains(int x, int y) const{
 
 ButtonType Button::getType() const{
     return type_;
+}
+
+SDL_Texture* Button::getTexture() const{
+    return texture_;
 }
