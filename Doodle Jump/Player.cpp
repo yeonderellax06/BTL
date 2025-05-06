@@ -12,12 +12,22 @@ Player::Player(SDL_Renderer* renderer) {
     texRight = IMG_LoadTexture(renderer, "images/doodle_right.png");
     currentTex = texRight;
 
+    jumpSound = Mix_LoadWAV("sounds/jump.wav");
+    if (!jumpSound){
+        SDL_Log("Failed to load jump sound: %s", Mix_GetError());
+    }
+
     rect = { (int)x, (int)y, 50, 50 };
 }
 
 Player::~Player() {
     SDL_DestroyTexture(texLeft);
     SDL_DestroyTexture(texRight);
+
+    if (jumpSound) {
+        Mix_FreeChunk(jumpSound);
+        jumpSound = nullptr;
+    }
 }
 
 void Player::handleInput(const Uint8* keys){
@@ -46,6 +56,9 @@ void Player::jump(float jumpForce) {
     if (onGround) {
         dy = jumpForce;
         onGround = false;
+        if (jumpSound) {
+            Mix_PlayChannel(-1, jumpSound, 0); // phát âm thanh 1 lần
+        }
     }
 }
 
@@ -103,8 +116,12 @@ bool Player::checkCollision(const SDL_Rect &platformRect){
 }
 
 void Player::reset(){
-    rect.x = 200;
-    rect.y = 300;
+    x = 200;
+    y = 300;
     dy = 0;
+    gameOver = false;
+    onGround = false;
+    rect.x = (int) x;
+    rect.y = (int) y;
 }
 

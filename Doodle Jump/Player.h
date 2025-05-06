@@ -3,6 +3,7 @@
 
 #include <SDL.h>
 #include <SDL_image.h>
+#include <SDL_mixer.h>
 #include "constants.h"
 
 
@@ -35,6 +36,8 @@ private:
     SDL_Texture* texRight;
     SDL_Texture* currentTex;
     SDL_Rect rect;
+
+    Mix_Chunk* jumpSound;
 
     bool onGround;
     bool gameOver;

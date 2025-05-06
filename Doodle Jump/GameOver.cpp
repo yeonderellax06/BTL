@@ -23,12 +23,18 @@ GameOverScreen::GameOverScreen(SDL_Renderer *renderer):
         return;
     }
 
+    gameOverSound = Mix_LoadWAV("sounds/fall.wav");
+    if (!gameOverSound) {
+        SDL_Log("Failed to load game over sound: %s", Mix_GetError());
+        }
+    soundPlayed = false;
+
     SDL_Texture* buttonTexture = SDL_CreateTextureFromSurface(renderer, buttonSurface);
     SDL_FreeSurface(buttonSurface);
 
     SDL_FRect playAgainBox = {
         (SCREEN_WIDTH - BUTTON_WIDTH * 2) / 2.0f,
-        350,
+        200,
         BUTTON_WIDTH,
         BUTTON_HEIGHT
         };
@@ -36,7 +42,7 @@ GameOverScreen::GameOverScreen(SDL_Renderer *renderer):
 
     SDL_FRect quitBox = {
         SCREEN_WIDTH / 2.0f,
-        450,
+        300,
         BUTTON_WIDTH,
         BUTTON_HEIGHT
         };
@@ -47,6 +53,7 @@ GameOverScreen::GameOverScreen(SDL_Renderer *renderer):
 GameOverScreen::~GameOverScreen(){
     if (gameOverTexture) SDL_DestroyTexture(gameOverTexture);
     if (!buttons.empty() && buttons[0].getTexture()) SDL_DestroyTexture(buttons[0].getTexture());
+    if (gameOverSound) Mix_FreeChunk(gameOverSound);
 }
 void GameOverScreen::render(SDL_Renderer* renderer){
     if (gameOver && gameOverTexture) {
@@ -62,6 +69,10 @@ bool GameOverScreen::isGameOver() const {
 
 void GameOverScreen::setGameOver(bool over){
     gameOver = over;
+    if (gameOver && !soundPlayed && gameOverSound) {
+        Mix_PlayChannel(-1, gameOverSound, 0);
+        soundPlayed = true;
+    }
 }
 
 Button* GameOverScreen::checkClick(int mx, int my) {
@@ -70,5 +81,10 @@ Button* GameOverScreen::checkClick(int mx, int my) {
             return &button;
     }
     return nullptr;
+}
+
+void GameOverScreen::reset() {
+    gameOver = false;
+    soundPlayed = false;
 }
 

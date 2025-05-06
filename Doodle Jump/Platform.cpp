@@ -58,7 +58,10 @@ PlatformManager::PlatformManager(int count, int spacingMin, int spacingMax)
 void PlatformManager::generatePlatforms(){
     platforms.clear();
     int y = SCREEN_HEIGHT - 50;
-    for (int i = 0; i < platformCount; i++){
+    int xStart =  200;
+    platforms.push_back(std::make_unique<NormalPlatform>(xStart, 350));
+    y = 350 - (verticalSpacingMin + rand() % (verticalSpacingMax - verticalSpacingMin));
+    for (int i = 1; i < platformCount; i++){
         int x = rand() % (SCREEN_WIDTH - PLATFORM_WIDTH);
         int type = rand()%3;
 
@@ -131,11 +134,21 @@ void PlatformManager::render(SDL_Renderer *renderer, SDL_Texture *normalTex, SDL
 }
 
 BreakablePlatform::BreakablePlatform(int x, int y)
-    : Platform(x, y), isBroken(false), breakTimer(0) {}
+    : Platform(x, y), isBroken(false), breakTimer(0), landCount(0) {
+        breakSound = Mix_LoadWAV("sounds/platform_break.wav");
+    }
+
+BreakablePlatform::~BreakablePlatform(){
+    Mix_FreeChunk(breakSound);
+}
 
 void BreakablePlatform::breakPlatform() {
     isBroken = true;
-    breakTimer = 30; // Hiệu ứng vỡ kéo dài 30 frame
+    breakTimer = 10; // Hiệu ứng vỡ kéo dài 30 frame
+
+    if (breakSound){
+        Mix_PlayChannel(-1, breakSound, 0);
+    }
 }
 
 void BreakablePlatform::update(float dy) {

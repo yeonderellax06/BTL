@@ -14,22 +14,23 @@
 1744610596 source:d:\c++\btl\player.cpp
 	"Player.h"
 
-1746506631 source:d:\c++\btl\doodle jump\platform.cpp
+1746514644 source:d:\c++\btl\doodle jump\platform.cpp
 	"Platform.h"
 
-1746456418 source:d:\c++\btl\doodle jump\gameover.cpp
+1746517398 source:d:\c++\btl\doodle jump\gameover.cpp
 	"GameOver.h"
 	"constants.h"
 	<SDL_image.h>
 	<iostream>
 
-1746447719 d:\c++\btl\doodle jump\gameover.h
+1746517398 d:\c++\btl\doodle jump\gameover.h
 	<SDL.h>
+	<SDL_mixer.h>
 	<string>
 	<vector>
 	"Button.h"
 
-1746501942 source:d:\c++\btl\doodle jump\main.cpp
+1746512601 source:d:\c++\btl\doodle jump\main.cpp
 	<iostream>
 	<SDL.h>
 	<SDL_image.h>
@@ -37,24 +38,20 @@
 	<SDL_ttf.h>
 	<vector>
 	<ctime>
-	"Player.h"
-	"Platform.h"
-	"GameOver.h"
-	"constants.h"
-	"Menu.h"
-	"Pause.h"
-	"GameScene.h"
+	"System.h"
 
-1746426545 d:\c++\btl\doodle jump\player.h
+1746512430 d:\c++\btl\doodle jump\player.h
 	<SDL.h>
 	<SDL_image.h>
+	<SDL_mixer.h>
 	"constants.h"
 
-1746426545 source:d:\c++\btl\doodle jump\player.cpp
+1746512777 source:d:\c++\btl\doodle jump\player.cpp
 	"Player.h"
 
-1746506602 d:\c++\btl\doodle jump\platform.h
+1746513835 d:\c++\btl\doodle jump\platform.h
 	<SDL.h>
+	<SDL_mixer.h>
 	<vector>
 	<memory>
 	<ctime>
@@ -82,11 +79,11 @@
 	<SDL_image.h>
 	"button.h"
 
-1746506214 source:d:\c++\btl\doodle jump\gamescene.cpp
+1746517398 source:d:\c++\btl\doodle jump\gamescene.cpp
 	"GameScene.h"
 	<SDL_image.h>
 
-1746506214 d:\c++\btl\doodle jump\gamescene.h
+1746517398 d:\c++\btl\doodle jump\gamescene.h
 	<SDL.h>
 	"Player.h"
 	"Platform.h"
@@ -101,4 +98,15 @@
 	<vector>
 	"Button.h"
 	"constants.h"
+
+1746508305 d:\c++\btl\doodle jump\system.h
+	<SDL.h>
+	"Menu.h"
+	"Pause.h"
+	"GameScene.h"
+	"GameOver.h"
+
+1746517422 source:d:\c++\btl\doodle jump\system.cpp
+	"System.h"
+	<SDL_image.h>
 

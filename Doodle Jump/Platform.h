@@ -2,6 +2,7 @@
 #define PLATFORM_H
 
 #include<SDL.h>
+#include <SDL_mixer.h>
 #include <vector>
 #include <memory>
 #include <ctime>
@@ -36,9 +37,13 @@ class BreakablePlatform : public Platform {
 private:
     bool isBroken;
     int breakTimer;
+    Mix_Chunk* breakSound;
+
 public:
     BreakablePlatform(int x, int y);
+    ~BreakablePlatform();
     int getBreakTimer() const { return breakTimer; }
+    int landCount;
 
     bool getIsBroken() const { return isBroken; }
     bool isBreakable() const override;

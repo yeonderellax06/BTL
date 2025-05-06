@@ -10,6 +10,10 @@ GameScene::GameScene(SDL_Renderer* renderer)
 GameScene::~GameScene() {
     SDL_DestroyTexture(background);
     SDL_DestroyTexture(platformTexture);
+    SDL_DestroyTexture(normalPlatformTex);
+    SDL_DestroyTexture(breakablePlatformTex);
+    SDL_DestroyTexture(moveablePlatformTex);
+    SDL_DestroyTexture(brokenPlatformTex);
 }
 
 void GameScene::reset() {
@@ -21,13 +25,29 @@ void GameScene::update(float gravity, float jumpForce) {
     player.update(gravity, jumpForce);
 
     for (auto& platform : platformManager.getPlatforms()) {
-        if (player.checkCollision(platform->getRect())) {
+    if (player.checkCollision(platform->getRect())) {
+        if (BreakablePlatform* bp = dynamic_cast<BreakablePlatform*>(platform.get())) {
+            if (!bp->getIsBroken()) {
+                bp->landCount++;
+                if (bp->landCount >= 2) {
+                    bp->breakPlatform();
+                }
+            }
+            if (!bp->getIsBroken()) {
+                player.landOnPlatform();
+                player.setY(platform->getY() - player.getRect().h);
+                player.jump(jumpForce);
+            }
+            // Không cho phép đứng lên platform đã vỡ
+        } else {
             player.landOnPlatform();
             player.setY(platform->getY() - player.getRect().h);
             player.jump(jumpForce);
             break;
         }
     }
+}
+
 
     if (player.getY() < 200) {
         float dy = 200 - player.getY();
